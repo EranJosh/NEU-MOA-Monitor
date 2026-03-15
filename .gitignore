@@ -23,6 +23,12 @@ firebase-debug.log
 # Claude
 .claude/
 
+# Instruction files and local screenshots
+*.pdf
+Screenshot*.png
+admindash*.png
+studentdash.png
+
 # Editor
 .vscode/
 .idea/
