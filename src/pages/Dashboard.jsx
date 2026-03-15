@@ -485,12 +485,15 @@ function StudentDashboard({ user, userDoc }) {
 
   // ── Real-time: non-deleted, client-side filter to APPROVED ──
   useEffect(() => {
-    const q = query(collection(db, 'moas'), where('isDeleted', '==', false))
+    const q = query(
+      collection(db, 'moas'),
+      where('isDeleted', '==', false),
+      where('status', 'in', APPROVED_STATUSES)
+    )
     const unsub = onSnapshot(q,
       snap => {
         const approved = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
-          .filter(d => APPROVED_STATUSES.includes(d.status))
         setMoas(approved)
         setLoading(false)
       },

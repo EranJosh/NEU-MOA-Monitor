@@ -32,7 +32,7 @@ service cloud.firestore {
     }
 
     function isApprovedStatus(status) {
-      return status.matches('^APPROVED:.*');
+      return status.matches('^APPROVED.*');
     }
 
     match /users/{userId} {
