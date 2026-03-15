@@ -20,7 +20,7 @@
 
 ## 📖 About the Project
 
-This is my Professional Elective 2 personal project — a role-based MOA management platform built for New Era University's OJT coordination office.
+This is my Professional Elective 2 personal project — a role-based MOA management platform built for New Era University.
 
 MOAs (Memoranda of Agreement) are formal partnership agreements between NEU and external companies that open up internship and training opportunities for students. Before this system, those records lived in spreadsheets — no visibility on expiring agreements, no audit trail, no way for students to browse available partners. This application fixes all of that.
 
