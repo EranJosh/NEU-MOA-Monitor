@@ -1,0 +1,69 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isNEUEmail() {
+      return request.auth.token.email.matches('.*@neu\\.edu\\.ph$');
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && isNEUEmail() && getUserData().role == role;
+    }
+
+    function isAdmin()   { return hasRole('admin'); }
+    function isFaculty() { return hasRole('faculty'); }
+    function isStudent() { return hasRole('student'); }
+
+    function isNotBlocked() {
+      return isAuthenticated() && getUserData().isBlocked == false;
+    }
+
+    function canFacultyManageMOA() {
+      return isFaculty() && isNotBlocked() && getUserData().canManageMOA == true;
+    }
+
+    function isApprovedStatus(status) {
+      return status.matches('^APPROVED:.*');
+    }
+
+    match /users/{userId} {
+      allow read:   if isAuthenticated() && isNEUEmail() && isNotBlocked()
+                       && (request.auth.uid == userId || isAdmin());
+      allow create: if isAuthenticated() && isNEUEmail() && request.auth.uid == userId;
+      allow update: if isAuthenticated() && isNEUEmail()
+                       && (request.auth.uid == userId || isAdmin());
+      allow list:   if isAdmin() && isNotBlocked();
+    }
+
+    match /moas/{moaId} {
+      allow read, list: if isAdmin()   && isNotBlocked();
+      allow read, list: if isFaculty() && isNotBlocked() && resource.data.isDeleted == false;
+      allow read, list: if isStudent() && isNotBlocked()
+                           && resource.data.isDeleted == false
+                           && isApprovedStatus(resource.data.status);
+      allow create: if isAdmin() && isNotBlocked() || canFacultyManageMOA();
+      allow update: if isAdmin() && isNotBlocked() || canFacultyManageMOA();
+      allow delete: if false;
+
+      match /auditTrail/{entryId} {
+        allow read, list: if isAdmin() && isNotBlocked();
+        allow create:     if isAdmin() && isNotBlocked() || canFacultyManageMOA();
+        allow update, delete: if false;
+      }
+    }
+
+    // Allow collectionGroup query on auditTrail (admin only)
+    match /{path=**}/auditTrail/{entryId} {
+      allow read: if isAdmin() && isNotBlocked();
+    }
+  }
+}
