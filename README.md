@@ -296,7 +296,7 @@ For a deeper look at the full Firestore schema, security rules, role permission 
     <td>
       <strong>Eran Josh C. Reyes</strong><br />
       New Era University<br />
-      College of Computer Studies<br />
+      College of Informatics and Computing Studies<br />
       Professional Elective 2 — Academic Year 2025–2026
     </td>
   </tr>
