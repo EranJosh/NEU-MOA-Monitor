@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { auth } from '../firebase/firebase'
 import { getOrCreateUserDoc } from '../firebase/firestore'
+
+const NEU_DOMAIN = '@neu.edu.ph'
 
 const AuthContext = createContext(null)
 
@@ -14,6 +16,16 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
+        // Secondary domain check — blocks non-NEU emails even if they
+        // slip past the signInWithGoogle guard (e.g. via direct auth state restore)
+        if (!firebaseUser.email?.endsWith(NEU_DOMAIN)) {
+          await signOut(auth)
+          setUser(null)
+          setUserDoc(null)
+          setBlocked(false)
+          setLoading(false)
+          return
+        }
         try {
           const docData = await getOrCreateUserDoc(firebaseUser)
           if (docData.isBlocked) {

@@ -19,6 +19,8 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
 
   if (loading) return <LoadingScreen />
   if (!user)   return <Navigate to="/login"   state={{ from: location }} replace />
+  // Tertiary guard — redirect non-NEU emails that somehow persist in auth state
+  if (user && !user.email?.endsWith('@neu.edu.ph')) return <Navigate to="/login" replace />
   if (blocked) return <Navigate to="/blocked" replace />
 
   if (allowedRoles && userDoc && !allowedRoles.includes(userDoc.role)) {
