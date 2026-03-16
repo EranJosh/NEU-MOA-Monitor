@@ -36,11 +36,14 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      allow read:   if isAuthenticated() && isNEUEmail() && isNotBlocked()
-                       && (request.auth.uid == userId || isAdmin());
+      // A user can always read their own doc (needed for live role sync via onSnapshot).
+      // isNotBlocked() is intentionally excluded here — it calls get() on this same doc,
+      // causing a circular dependency that silently kills real-time listeners.
+      allow read:   if isAuthenticated() && isNEUEmail()
+                       && (request.auth.uid == userId || isAdmin() && isNotBlocked());
       allow create: if isAuthenticated() && isNEUEmail() && request.auth.uid == userId;
       allow update: if isAuthenticated() && isNEUEmail()
-                       && (request.auth.uid == userId || isAdmin());
+                       && (request.auth.uid == userId || isAdmin() && isNotBlocked());
       allow list:   if isAdmin() && isNotBlocked();
     }
 

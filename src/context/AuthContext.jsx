@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubAuth = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log('[AUTH] Auth state changed:', firebaseUser?.email ?? 'signed out')
       // Tear down any previous doc listener before switching users
       if (unsubDocRef.current) {
         unsubDocRef.current()
@@ -56,16 +57,19 @@ export const AuthProvider = ({ children }) => {
         // Attach live listener — fires immediately with current data,
         // then again whenever role / isBlocked / canManageMOA changes
         let prevRole = null
+        console.log('[AUTH] Attaching onSnapshot for uid:', firebaseUser.uid)
 
         unsubDocRef.current = onSnapshot(
           doc(db, 'users', firebaseUser.uid),
           (snap) => {
+            console.log('[AUTH] Firestore user doc updated:', snap.data())
             if (!snap.exists()) {
               setLoading(false)
               return
             }
 
             const data = snap.data()
+            console.log('[AUTH] Role set to:', data.role)
 
             setUser(firebaseUser)
             setUserDoc(data)
