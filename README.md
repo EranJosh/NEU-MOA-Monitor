@@ -73,37 +73,134 @@ There is a full admin and faculty side for managing the complete MOA lifecycle (
 
 ## 📸 Screenshots
 
-> Screenshots will be added here. See the [/docs/screenshots/](docs/screenshots/) folder.
+### 🔐 Authentication
 
 <table>
   <tr>
     <td align="center" width="50%">
       <img src="docs/screenshots/login-page.png" alt="Login Page" />
-      <br /><sub><b>Login Page</b> — Institutional email sign-in with NEU branding</sub>
+      <br /><sub><b>Login Page</b> — NEU-branded sign-in with Google OAuth restricted to @neu.edu.ph accounts</sub>
     </td>
     <td align="center" width="50%">
-      <img src="docs/screenshots/admin-dashboard.png" alt="Admin Dashboard" />
-      <br /><sub><b>Admin Dashboard</b> — MOA stats and status breakdown at a glance</sub>
+      <img src="docs/screenshots/login-access-denied.png" alt="Access Denied" />
+      <br /><sub><b>Access Denied</b> — Error shown when a non-NEU email attempts to sign in</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 🛡️ Admin Dashboard
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/admin-overview.png" alt="Admin Overview" />
+      <br /><sub><b>Admin Overview</b> — Full system dashboard with stat cards, quick access tiles, and recent MOA submissions</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/admin-moa-registry.png" alt="Admin MOA Registry" />
+      <br /><sub><b>MOA Registry</b> — Filterable table of all MOAs with status badges and college columns</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="docs/screenshots/moa-records.png" alt="MOA Records" />
-      <br /><sub><b>MOA Registry</b> — Filterable table with status badges and slide-in detail panel</sub>
+      <img src="docs/screenshots/admin-moa-registry-wide.png" alt="MOA Registry Wide View" />
+      <br /><sub><b>MOA Registry (Wide View)</b> — Full column spread showing HTE ID, contact, industry, dates, status, and college</sub>
     </td>
     <td align="center" width="50%">
-      <img src="docs/screenshots/moa-detail.png" alt="MOA Detail Panel" />
-      <br /><sub><b>MOA Detail Panel</b> — Full info, status timeline, audit trail, and notes</sub>
+      <img src="docs/screenshots/admin-moa-detail-panel.png" alt="Admin MOA Detail Panel" />
+      <br /><sub><b>MOA Detail Panel</b> — Slide-in panel with full company info, status timeline, Edit / Renew / Delete actions</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="docs/screenshots/student-dashboard.png" alt="Student Dashboard" />
-      <br /><sub><b>Student Dashboard</b> — Industry-filtered card grid of approved partners</sub>
+      <img src="docs/screenshots/admin-moa-detail-notes.png" alt="MOA Detail Notes & Audit" />
+      <br /><sub><b>Detail Panel — Notes & Audit</b> — Internal notes thread and recent audit trail entries per MOA</sub>
     </td>
     <td align="center" width="50%">
-      <img src="docs/screenshots/statistics.png" alt="Statistics" />
-      <br /><sub><b>Statistics</b> — Recharts breakdown by status, college, and industry</sub>
+      <img src="docs/screenshots/admin-add-moa-form.png" alt="Add MOA Form" />
+      <br /><sub><b>Add MOA Form</b> — Modal form for creating a new Memorandum of Agreement record</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/admin-edit-moa-form.png" alt="Edit MOA Form" />
+      <br /><sub><b>Edit MOA Form</b> — Pre-filled modal for editing an existing MOA record</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/admin-user-management.png" alt="User Management" />
+      <br /><sub><b>User Management</b> — Admin table for assigning roles, blocking users, and toggling MOA access</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/admin-audit-trail.png" alt="Audit Trail" />
+      <br /><sub><b>Audit Trail</b> — System-wide log of all INSERT and UPDATE operations across all MOAs</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/admin-statistics.png" alt="Admin Statistics" />
+      <br /><sub><b>Statistics — Overview</b> — Stat cards with monthly submission bar chart and status distribution</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/admin-statistics-breakdown.png" alt="Statistics Breakdown" />
+      <br /><sub><b>Statistics — Breakdown</b> — Industry and college breakdown bar charts across all MOA records</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/admin-statistics-chart-hover.png" alt="Statistics Chart Hover" />
+      <br /><sub><b>Statistics — Chart Tooltip</b> — Interactive monthly chart with hover tooltip showing MOA count per month</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="100%">
+      <img src="docs/screenshots/admin-statistics-status-hover.png" alt="Statistics Status Hover" />
+      <br /><sub><b>Statistics — Status Tooltip</b> — Status distribution chart with hover label showing individual status counts</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 👩‍🏫 Faculty Dashboard
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/faculty-overview.png" alt="Faculty Overview" />
+      <br /><sub><b>Faculty Overview</b> — Dashboard with MOA stat cards, expiring soon alerts, and active MOA list</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/faculty-moa-detail-panel.png" alt="Faculty MOA Detail Panel" />
+      <br /><sub><b>Faculty MOA Detail Panel</b> — Read-only (or edit-enabled) slide-in panel showing full MOA details</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/faculty-moa-registry.png" alt="Faculty MOA Registry" />
+      <br /><sub><b>Faculty MOA Registry</b> — Read-only table view with a notice that admin permission is required to edit</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/faculty-statistics.png" alt="Faculty Statistics" />
+      <br /><sub><b>Faculty Statistics</b> — Industry and college breakdown visible to faculty users</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 🎓 Student Dashboard
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/student-overview.png" alt="Student Overview" />
+      <br /><sub><b>Student Overview</b> — Industry-filtered card grid showing all approved MOA partner companies</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/student-moa-detail-modal.png" alt="Student MOA Detail Modal" />
+      <br /><sub><b>Student MOA Detail Modal</b> — Full-screen modal with MOA info, college endorsement, and partnership description</sub>
     </td>
   </tr>
 </table>
