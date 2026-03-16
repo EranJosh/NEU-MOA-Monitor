@@ -1,16 +1,9 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { doc, onSnapshot, setDoc, updateDoc, serverTimestamp, getDoc } from 'firebase/firestore'
 import { auth, db } from '../firebase/firebase'
-import { getOrCreateUserDoc } from '../firebase/firestore'
 
 const NEU_DOMAIN = '@neu.edu.ph'
-
-const ROLE_HOME = {
-  admin:   '/dashboard',
-  faculty: '/dashboard',
-  student: '/dashboard',
-}
 
 const AuthContext = createContext(null)
 
@@ -20,13 +13,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [blocked, setBlocked] = useState(false)
 
-  // Holds the unsubscribe fn for the Firestore doc listener
   const unsubDocRef = useRef(null)
 
   useEffect(() => {
     const unsubAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       console.log('[AUTH] Auth state changed:', firebaseUser?.email ?? 'signed out')
-      // Tear down any previous doc listener before switching users
+
+      // Tear down previous doc listener
       if (unsubDocRef.current) {
         unsubDocRef.current()
         unsubDocRef.current = null
@@ -40,7 +33,7 @@ export const AuthProvider = ({ children }) => {
         return
       }
 
-      // Secondary NEU domain check
+      // NEU domain check
       if (!firebaseUser.email?.endsWith(NEU_DOMAIN)) {
         await signOut(auth)
         setUser(null)
@@ -50,57 +43,71 @@ export const AuthProvider = ({ children }) => {
         return
       }
 
+      // Ensure user doc exists before attaching listener.
+      // Use getDoc with server source to bypass cache entirely.
+      const userRef = doc(db, 'users', firebaseUser.uid)
       try {
-        // Ensure the Firestore user doc exists (creates on first login)
-        await getOrCreateUserDoc(firebaseUser)
-
-        // Attach live listener — fires immediately with current data,
-        // then again whenever role / isBlocked / canManageMOA changes
-        let prevRole = null
-        console.log('[AUTH] Attaching onSnapshot for uid:', firebaseUser.uid)
-
-        unsubDocRef.current = onSnapshot(
-          doc(db, 'users', firebaseUser.uid),
-          (snap) => {
-            console.log('[AUTH] Firestore user doc updated:', snap.data())
-            if (!snap.exists()) {
-              setLoading(false)
-              return
-            }
-
-            const data = snap.data()
-            console.log('[AUTH] Role set to:', data.role)
-
-            setUser(firebaseUser)
-            setUserDoc(data)
-
-            if (data.isBlocked) {
-              setBlocked(true)
-              // Redirect to blocked page — ProtectedRoute handles the UI
-            } else {
-              setBlocked(false)
-
-              // Redirect if role changed after initial load
-              if (prevRole !== null && data.role !== prevRole) {
-                const dest = ROLE_HOME[data.role] || '/dashboard'
-                window.location.href = dest
-              }
-            }
-
-            prevRole = data.role
-            setLoading(false)
-          },
-          (err) => {
-            console.error('User doc listener error:', err)
-            setLoading(false)
-          }
-        )
+        const snap = await getDoc(userRef)
+        if (!snap.exists()) {
+          // First login — create the doc
+          await setDoc(userRef, {
+            uid:         firebaseUser.uid,
+            email:       firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            photoURL:    firebaseUser.photoURL,
+            role:        'student',
+            isBlocked:   false,
+            canManageMOA: false,
+            createdAt:   serverTimestamp(),
+            lastLogin:   serverTimestamp(),
+          })
+        } else {
+          // Existing user — only update lastLogin, no other fields touched
+          await updateDoc(userRef, { lastLogin: serverTimestamp() })
+        }
       } catch (err) {
-        console.error('Error setting up user doc listener:', err)
-        setUser(null)
-        setUserDoc(null)
-        setLoading(false)
+        console.error('[AUTH] Error ensuring user doc:', err)
       }
+
+      // Now attach the live listener. It fires immediately with current server
+      // data and re-fires on any change (role, isBlocked, canManageMOA, etc.)
+      let prevRole = null
+
+      unsubDocRef.current = onSnapshot(
+        userRef,
+        (snap) => {
+          if (!snap.exists()) {
+            setLoading(false)
+            return
+          }
+
+          const data = snap.data()
+          console.log('[AUTH] Firestore user doc updated:', data)
+          console.log('[AUTH] Role set to:', data.role)
+
+          setUser(firebaseUser)
+          setUserDoc(data)
+
+          if (data.isBlocked) {
+            setBlocked(true)
+          } else {
+            setBlocked(false)
+
+            // Redirect on live role change (not on initial load)
+            if (prevRole !== null && data.role !== prevRole) {
+              console.log('[AUTH] Role changed from', prevRole, 'to', data.role, '— redirecting')
+              window.location.href = '/dashboard'
+            }
+          }
+
+          prevRole = data.role
+          setLoading(false)
+        },
+        (err) => {
+          console.error('[AUTH] User doc listener error:', err)
+          setLoading(false)
+        }
+      )
     })
 
     return () => {
