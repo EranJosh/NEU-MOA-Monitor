@@ -19,6 +19,8 @@
 import {
   collection,
   addDoc,
+  getDocs,
+  deleteDoc,
   Timestamp,
   writeBatch,
   doc,
@@ -429,10 +431,56 @@ const SEED_MOAS = [
 ]
 
 // ─────────────────────────────────────────────────────────────
+// CLEANUP — hard-delete ALL moa docs + sub-collections
+// ─────────────────────────────────────────────────────────────
+
+export const cleanupMOAs = async () => {
+  console.log('[NEU CLEANUP] Scanning moas collection...')
+  const moasRef = collection(db, 'moas')
+  const snap = await getDocs(moasRef)
+
+  if (snap.empty) {
+    console.log('[NEU CLEANUP] Nothing to delete — collection is already empty.')
+    return 0
+  }
+
+  let deleted = 0
+  for (const moaDoc of snap.docs) {
+    // Delete auditTrail sub-collection
+    const auditSnap = await getDocs(collection(db, 'moas', moaDoc.id, 'auditTrail'))
+    for (const entry of auditSnap.docs) {
+      await deleteDoc(entry.ref)
+    }
+    // Delete notes sub-collection
+    const notesSnap = await getDocs(collection(db, 'moas', moaDoc.id, 'notes'))
+    for (const note of notesSnap.docs) {
+      await deleteDoc(note.ref)
+    }
+    // Delete the MOA document itself
+    await deleteDoc(moaDoc.ref)
+    deleted++
+    console.log(`[NEU CLEANUP]  ✓ Deleted ${moaDoc.id} — ${moaDoc.data().companyName || '(no name)'}`)
+  }
+
+  console.log(`[NEU CLEANUP] Done. Deleted ${deleted} MOA document(s).`)
+  return deleted
+}
+
+// ─────────────────────────────────────────────────────────────
 // MAIN SEED RUNNER
 // ─────────────────────────────────────────────────────────────
 
 export const runSeed = async () => {
+  // Guard: abort if data already exists
+  const existingSnap = await getDocs(collection(db, 'moas'))
+  if (!existingSnap.empty) {
+    console.warn(
+      `[NEU SEED] Seed aborted — data already exists (${existingSnap.size} docs found). ` +
+      'Run cleanup first before reseeding: await window.__cleanupNEUMOA()'
+    )
+    return { success: 0, failed: 0, aborted: true }
+  }
+
   console.log('[NEU SEED] Starting seed — inserting', SEED_MOAS.length, 'MOAs...')
 
   const moasRef = collection(db, 'moas')

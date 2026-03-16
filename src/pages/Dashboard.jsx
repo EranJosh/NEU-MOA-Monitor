@@ -11,7 +11,9 @@ import {
   COLLEGES,
   APPROVED_STATUSES,
 } from '../firebase/firestore'
-import { runSeed, patchDescriptions } from '../firebase/seed'
+import { runSeed, patchDescriptions, cleanupMOAs } from '../firebase/seed'
+window.__cleanupNEUMOA = cleanupMOAs
+window.__seedNEUMOA = async () => { const r = await runSeed(); await patchDescriptions().catch(() => {}); return r }
 import StatusBadge from '../components/StatusBadge'
 import MOADetailPanel from '../components/MOADetailPanel'
 import StudentMOACard from '../components/StudentMOACard'
@@ -485,6 +487,7 @@ function StudentDashboard({ user, userDoc }) {
 
   // ── Real-time: non-deleted, client-side filter to APPROVED ──
   useEffect(() => {
+    console.log('[STUDENT] APPROVED_STATUSES filtering for:', APPROVED_STATUSES)
     const q = query(
       collection(db, 'moas'),
       where('isDeleted', '==', false),
@@ -492,12 +495,15 @@ function StudentDashboard({ user, userDoc }) {
     )
     const unsub = onSnapshot(q,
       snap => {
+        console.log('[STUDENT] Firestore snapshot size:', snap.size)
+        if (snap.size > 0) console.log('[STUDENT] First doc status:', snap.docs[0].data().status)
         const approved = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
+        console.log('[STUDENT] Final moas count:', approved.length)
         setMoas(approved)
         setLoading(false)
       },
-      err => { console.error(err); setLoading(false) }
+      err => { console.error('[STUDENT] Firestore error:', err); setLoading(false) }
     )
     return () => unsub()
   }, [])
