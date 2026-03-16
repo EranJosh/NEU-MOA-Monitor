@@ -11,9 +11,10 @@ import {
   COLLEGES,
   APPROVED_STATUSES,
 } from '../firebase/firestore'
-import { runSeed, patchDescriptions, cleanupMOAs } from '../firebase/seed'
+import { runSeed, patchDescriptions, cleanupMOAs, patchColleges } from '../firebase/seed'
 window.__cleanupNEUMOA = cleanupMOAs
 window.__seedNEUMOA = async () => { const r = await runSeed(); await patchDescriptions().catch(() => {}); return r }
+window.__patchColleges = patchColleges
 import StatusBadge from '../components/StatusBadge'
 import MOADetailPanel from '../components/MOADetailPanel'
 import StudentMOACard from '../components/StudentMOACard'

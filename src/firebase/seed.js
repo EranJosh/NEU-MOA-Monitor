@@ -50,7 +50,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(365)),
     expirationDate:    ts(daysFromNow(730)),
     status:            MOA_STATUSES.APPROVED_SIGNED,
-    endorsedByCollege: 'College of Engineering',
+    endorsedByCollege: 'College of Engineering and Architecture',
     description:       'Globe Telecom Inc. partners with NEU to provide Engineering students with telecommunications network operations exposure through structured on-the-job training programs.',
     isDeleted:         false,
     deletedAt:         null,
@@ -68,7 +68,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(300)),
     expirationDate:    ts(daysFromNow(700)),
     status:            MOA_STATUSES.APPROVED_NOTARIZING,
-    endorsedByCollege: 'College of Computer Studies',
+    endorsedByCollege: 'College of Informatics and Computing Studies',
     description:       'PLDT Inc. collaborates with NEU to give Computer Studies students real-world experience in enterprise IT infrastructure, network management, and digital innovation.',
     isDeleted:         false,
     deletedAt:         null,
@@ -86,7 +86,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(400)),
     expirationDate:    ts(daysFromNow(600)),
     status:            MOA_STATUSES.APPROVED_SIGNED,
-    endorsedByCollege: 'College of Computer Studies',
+    endorsedByCollege: 'College of Informatics and Computing Studies',
     description:       'IBM Philippines Inc. engages NEU students in cutting-edge technology projects spanning artificial intelligence, cloud computing, and enterprise software development.',
     isDeleted:         false,
     deletedAt:         null,
@@ -104,7 +104,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(200)),
     expirationDate:    ts(daysFromNow(800)),
     status:            MOA_STATUSES.APPROVED_NO_NOTARY,
-    endorsedByCollege: 'College of Engineering',
+    endorsedByCollege: 'College of Engineering and Architecture',
     description:       'Microsoft Philippines Inc. partners with NEU to offer Engineering students immersive exposure to cloud platforms, software engineering practices, and digital transformation initiatives.',
     isDeleted:         false,
     deletedAt:         null,
@@ -122,7 +122,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(180)),
     expirationDate:    ts(daysFromNow(545)),
     status:            MOA_STATUSES.APPROVED_SIGNED,
-    endorsedByCollege: 'College of Engineering',
+    endorsedByCollege: 'College of Engineering and Architecture',
     description:       'Dell Technologies Philippines provides NEU Engineering students with hands-on internship experience in hardware engineering, IT infrastructure, and enterprise solutions delivery.',
     isDeleted:         false,
     deletedAt:         null,
@@ -160,8 +160,8 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(30)),
     expirationDate:    ts(daysFromNow(1095)),
     status:            MOA_STATUSES.PROCESSING_AWAITING,
-    endorsedByCollege: 'College of Hotel and Restaurant Management',
-    description:       'Jollibee Foods Corporation engages NEU Hotel and Restaurant Management students in food service operations, kitchen management, and quality assurance training.',
+    endorsedByCollege: 'College of Business Administration',
+    description:       'Jollibee Foods Corporation engages NEU Business Administration students in food service operations, kitchen management, and quality assurance training.',
     isDeleted:         false,
     deletedAt:         null,
     deletedBy:         null,
@@ -214,7 +214,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(5)),
     expirationDate:    ts(daysFromNow(1095)),
     status:            MOA_STATUSES.PROCESSING_AWAITING,
-    endorsedByCollege: 'College of Computer Studies',
+    endorsedByCollege: 'College of Informatics and Computing Studies',
     description:       'Grab Philippines Inc. collaborates with NEU to immerse Computer Studies students in platform engineering, data science, and mobile application development within a high-growth tech environment.',
     isDeleted:         false,
     deletedAt:         null,
@@ -234,7 +234,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(700)),
     expirationDate:    ts(daysFromNow(45)),
     status:            MOA_STATUSES.EXPIRING,
-    endorsedByCollege: 'College of Computer Studies',
+    endorsedByCollege: 'College of Informatics and Computing Studies',
     description:       'Concentrix Philippines partners with NEU to provide Computer Studies students with practical exposure to business process outsourcing, customer experience management, and digital service operations.',
     isDeleted:         false,
     deletedAt:         null,
@@ -272,7 +272,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(1095)),
     expirationDate:    ts(daysAgo(180)),
     status:            MOA_STATUSES.EXPIRED,
-    endorsedByCollege: 'College of Computer Studies',
+    endorsedByCollege: 'College of Informatics and Computing Studies',
     description:       'Accenture Inc. partners with NEU to provide Computer Studies students with internship opportunities in management consulting, technology implementation, and digital transformation projects.',
     isDeleted:         false,
     deletedAt:         null,
@@ -290,7 +290,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(1200)),
     expirationDate:    ts(daysAgo(300)),
     status:            MOA_STATUSES.EXPIRED,
-    endorsedByCollege: 'College of Architecture',
+    endorsedByCollege: 'College of Engineering and Architecture',
     description:       'Robinsons Land Corporation collaborates with NEU Architecture students through exposure to large-scale commercial real estate development, mall design, and construction project management.',
     isDeleted:         false,
     deletedAt:         null,
@@ -328,7 +328,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(500)),
     expirationDate:    ts(daysFromNow(365)),
     status:            MOA_STATUSES.PROCESSING_LEGAL,
-    endorsedByCollege: 'College of Engineering',
+    endorsedByCollege: 'College of Engineering and Architecture',
     description:       'Eastern Telecommunications Philippines engages NEU Engineering students in telecommunications infrastructure deployment, network operations, and enterprise connectivity solutions.',
     isDeleted:         true,
     deletedAt:         ts(daysAgo(60)),
@@ -346,8 +346,8 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(600)),
     expirationDate:    ts(daysFromNow(400)),
     status:            MOA_STATUSES.APPROVED_SIGNED,
-    endorsedByCollege: 'College of Hotel and Restaurant Management',
-    description:       'Jollibee Foods Corporation Commissary provides NEU Hotel and Restaurant Management students with training in large-scale food production, quality control, and supply chain management.',
+    endorsedByCollege: 'College of Business Administration',
+    description:       'Jollibee Foods Corporation Commissary provides NEU Business Administration students with training in large-scale food production, quality control, and supply chain management.',
     isDeleted:         true,
     deletedAt:         ts(daysAgo(30)),
     deletedBy:         SEED_UID,
@@ -420,7 +420,7 @@ const SEED_MOAS = [
     effectiveDate:     ts(daysAgo(100)),
     expirationDate:    ts(daysFromNow(900)),
     status:            MOA_STATUSES.APPROVED_NO_NOTARY,
-    endorsedByCollege: 'College of Engineering',
+    endorsedByCollege: 'College of Engineering and Architecture',
     description:       'Smart Communications Inc. partners with NEU to provide Engineering students with industry exposure in wireless network engineering, telecommunications research, and 5G technology deployment.',
     isDeleted:         false,
     deletedAt:         null,
@@ -563,5 +563,32 @@ export const patchDescriptions = async () => {
   })
   if (count > 0) await batch.commit()
   console.log(`[NEU PATCH] Updated ${count} MOA docs with descriptions.`)
+  return count
+}
+
+// ─────────────────────────────────────────────────────────────
+// PATCH: migrate old college names to official NEU colleges
+// ─────────────────────────────────────────────────────────────
+
+const COLLEGE_MIGRATION_MAP = {
+  'College of Engineering':                    'College of Engineering and Architecture',
+  'College of Computer Studies':               'College of Informatics and Computing Studies',
+  'College of Architecture':                   'College of Engineering and Architecture',
+  'College of Hotel and Restaurant Management':'College of Business Administration',
+}
+
+export const patchColleges = async () => {
+  const snap = await getDocs(collection(db, 'moas'))
+  const batch = writeBatch(db)
+  let count = 0
+  snap.docs.forEach(docSnap => {
+    const current = docSnap.data().endorsedByCollege
+    const updated = COLLEGE_MIGRATION_MAP[current]
+    if (!updated) return
+    batch.update(doc(db, 'moas', docSnap.id), { endorsedByCollege: updated })
+    count++
+  })
+  if (count > 0) await batch.commit()
+  console.log(`[NEU PATCH] Updated ${count} MOA docs with new college names.`)
   return count
 }

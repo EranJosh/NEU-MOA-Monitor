@@ -46,15 +46,25 @@ export const INDUSTRY_TYPES = [
 ]
 
 export const COLLEGES = [
-  'College of Engineering',
-  'College of Computer Studies',
-  'College of Business Administration',
-  'College of Hotel and Restaurant Management',
+  'College of Law',
+  'College of Medicine',
+  'School of Graduate Studies',
+  'School of International Relations',
   'College of Nursing',
+  'College of Medical Technology',
+  'College of Physical Therapy',
+  'College of Respiratory Therapy',
+  'College of Midwifery',
+  'College of Engineering and Architecture',
+  'College of Informatics and Computing Studies',
+  'College of Accountancy',
+  'College of Business Administration',
+  'College of Criminology',
   'College of Education',
   'College of Arts and Sciences',
-  'College of Architecture',
-  'College of Law',
+  'College of Communication',
+  'College of Music',
+  'College of Agriculture',
 ]
 
 export const AUDIT_OPERATIONS = {
