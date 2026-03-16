@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { doc, onSnapshot, setDoc, updateDoc, serverTimestamp, getDoc } from 'firebase/firestore'
+import { doc, onSnapshot, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from '../firebase/firebase'
 
 const NEU_DOMAIN = '@neu.edu.ph'
@@ -13,7 +13,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [blocked, setBlocked] = useState(false)
 
-  const unsubDocRef = useRef(null)
+  const unsubDocRef  = useRef(null)
+  const initializedRef = useRef(false) // tracks if we've done the first-load write
 
   useEffect(() => {
     const unsubAuth = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -24,6 +25,7 @@ export const AuthProvider = ({ children }) => {
         unsubDocRef.current()
         unsubDocRef.current = null
       }
+      initializedRef.current = false
 
       if (!firebaseUser) {
         setUser(null)
@@ -33,7 +35,6 @@ export const AuthProvider = ({ children }) => {
         return
       }
 
-      // NEU domain check
       if (!firebaseUser.email?.endsWith(NEU_DOMAIN)) {
         await signOut(auth)
         setUser(null)
@@ -43,47 +44,50 @@ export const AuthProvider = ({ children }) => {
         return
       }
 
-      // Ensure user doc exists before attaching listener.
-      // Use getDoc with server source to bypass cache entirely.
       const userRef = doc(db, 'users', firebaseUser.uid)
-      try {
-        const snap = await getDoc(userRef)
-        if (!snap.exists()) {
-          // First login — create the doc
-          await setDoc(userRef, {
-            uid:         firebaseUser.uid,
-            email:       firebaseUser.email,
-            displayName: firebaseUser.displayName,
-            photoURL:    firebaseUser.photoURL,
-            role:        'student',
-            isBlocked:   false,
-            canManageMOA: false,
-            createdAt:   serverTimestamp(),
-            lastLogin:   serverTimestamp(),
-          })
-        } else {
-          // Existing user — only update lastLogin, no other fields touched
-          await updateDoc(userRef, { lastLogin: serverTimestamp() })
-        }
-      } catch (err) {
-        console.error('[AUTH] Error ensuring user doc:', err)
-      }
+      let prevRole  = null
 
-      // Now attach the live listener. It fires immediately with current server
-      // data and re-fires on any change (role, isBlocked, canManageMOA, etc.)
-      let prevRole = null
-
+      // onSnapshot always delivers live server data — no cache risk.
+      // We handle doc creation / lastLogin update inside the first callback.
       unsubDocRef.current = onSnapshot(
         userRef,
-        (snap) => {
+        async (snap) => {
           if (!snap.exists()) {
-            setLoading(false)
+            // Brand-new user — create the document with default role
+            console.log('[AUTH] No user doc found — creating with role: student')
+            try {
+              await setDoc(userRef, {
+                uid:          firebaseUser.uid,
+                email:        firebaseUser.email,
+                displayName:  firebaseUser.displayName,
+                photoURL:     firebaseUser.photoURL,
+                role:         'student',
+                isBlocked:    false,
+                canManageMOA: false,
+                createdAt:    serverTimestamp(),
+                lastLogin:    serverTimestamp(),
+              })
+            } catch (err) {
+              console.error('[AUTH] Error creating user doc:', err)
+              setLoading(false)
+            }
+            // The setDoc above will re-trigger this callback with the new data
             return
           }
 
           const data = snap.data()
           console.log('[AUTH] Firestore user doc updated:', data)
           console.log('[AUTH] Role set to:', data.role)
+
+          // On first successful read, update lastLogin without touching any other field
+          if (!initializedRef.current) {
+            initializedRef.current = true
+            try {
+              await updateDoc(userRef, { lastLogin: serverTimestamp() })
+            } catch (err) {
+              console.error('[AUTH] Error updating lastLogin:', err)
+            }
+          }
 
           setUser(firebaseUser)
           setUserDoc(data)
@@ -93,9 +97,8 @@ export const AuthProvider = ({ children }) => {
           } else {
             setBlocked(false)
 
-            // Redirect on live role change (not on initial load)
             if (prevRole !== null && data.role !== prevRole) {
-              console.log('[AUTH] Role changed from', prevRole, 'to', data.role, '— redirecting')
+              console.log('[AUTH] Role changed:', prevRole, '→', data.role, '— redirecting')
               window.location.href = '/dashboard'
             }
           }
