@@ -32,8 +32,9 @@ export const MOA_STATUSES = {
 }
 
 export const APPROVED_STATUSES = [
-  'APPROVED – Active',
-  'APPROVED – On Hold',
+  'APPROVED: Signed by President',
+  'APPROVED: On-going notarization',
+  'APPROVED: No notarization needed',
 ]
 
 export const INDUSTRY_TYPES = [
