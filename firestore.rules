@@ -45,19 +45,24 @@ service cloud.firestore {
     }
 
     match /moas/{moaId} {
-      allow read, list: if isAdmin()   && isNotBlocked();
-      allow read, list: if isFaculty() && isNotBlocked() && resource.data.isDeleted == false;
-      allow read, list: if isStudent() && isNotBlocked()
-                           && resource.data.isDeleted == false
-                           && isApprovedStatus(resource.data.status);
+      // All authenticated NEU users can read — role filtering is enforced in app code
+      allow read, list: if isAuthenticated() && isNEUEmail();
       allow create: if isAdmin() && isNotBlocked() || canFacultyManageMOA();
       allow update: if isAdmin() && isNotBlocked() || canFacultyManageMOA();
-      allow delete: if false;
+      allow delete: if isAdmin() && isNotBlocked();
 
       match /auditTrail/{entryId} {
-        allow read, list: if isAdmin() && isNotBlocked();
+        allow read, list: if isAuthenticated() && isNEUEmail();
         allow create:     if isAdmin() && isNotBlocked() || canFacultyManageMOA();
-        allow update, delete: if false;
+        allow update:     if false;
+        allow delete:     if isAdmin() && isNotBlocked();
+      }
+
+      match /notes/{noteId} {
+        allow read, list: if isAuthenticated() && isNEUEmail();
+        allow create:     if isAdmin() && isNotBlocked();
+        allow update:     if false;
+        allow delete:     if isAdmin() && isNotBlocked();
       }
     }
 
