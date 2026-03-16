@@ -247,7 +247,7 @@ export default function MOAModal({ open, moa, onClose, onSaved, statusReadOnly =
           )}
 
           {/* Row 1 */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 20px' }}>
+          <div className="grid-2col-form" style={{ gap: '0 20px' }}>
             <FieldGroup label="HTE ID (auto-generated)" error={errors.hteId}>
               <div style={{ position: 'relative' }}>
                 <input
@@ -302,7 +302,7 @@ export default function MOAModal({ open, moa, onClose, onSaved, statusReadOnly =
           </FieldGroup>
 
           {/* Row 4 */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 20px' }}>
+          <div className="grid-2col-form" style={{ gap: '0 20px' }}>
             <FieldGroup label="Contact Person" error={errors.contactPerson}>
               <input style={FIELD_STYLE} value={form.contactPerson} onChange={e => set('contactPerson', e.target.value)} onFocus={inputFocus} onBlur={inputBlur} placeholder="Full name" />
             </FieldGroup>
@@ -312,7 +312,7 @@ export default function MOAModal({ open, moa, onClose, onSaved, statusReadOnly =
           </div>
 
           {/* Row 5 */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 20px' }}>
+          <div className="grid-2col-form" style={{ gap: '0 20px' }}>
             <FieldGroup label="Effective Date" error={errors.effectiveDate}>
               <input type="date" style={FIELD_STYLE} value={form.effectiveDate} onChange={e => set('effectiveDate', e.target.value)} onFocus={inputFocus} onBlur={inputBlur} />
             </FieldGroup>

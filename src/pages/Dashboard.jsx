@@ -15,6 +15,7 @@ import { runSeed, patchDescriptions, cleanupMOAs, patchColleges } from '../fireb
 window.__cleanupNEUMOA = cleanupMOAs
 window.__seedNEUMOA = async () => { const r = await runSeed(); await patchDescriptions().catch(() => {}); return r }
 window.__patchColleges = patchColleges
+window.__fixCollegeNames = patchColleges
 import StatusBadge from '../components/StatusBadge'
 import MOADetailPanel from '../components/MOADetailPanel'
 import StudentMOACard from '../components/StudentMOACard'
@@ -324,7 +325,7 @@ function AdminDashboard({ user, userDoc, canManageMOA }) {
       </div>
 
       {/* Chart + Recent MOAs */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
+      <div className="grid-2col" style={{ gap: 18 }}>
         <MonthlyChart data={monthlyData} />
 
         <div style={{ background: 'rgba(17,34,64,0.55)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '20px 0 0' }}>

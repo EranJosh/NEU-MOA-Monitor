@@ -123,3 +123,38 @@
     transform: translateX(0) !important;
   }
 }
+
+/* ── Responsive 2-column grid (stats panels, dashboard charts) ── */
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 767px) {
+  .grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Responsive 2-column form field row ── */
+.grid-2col-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 767px) {
+  .grid-2col-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Mobile content padding ── */
+@media (max-width: 767px) {
+  /* Ensure page content has breathing room at bottom */
+  .mobile-page-content {
+    padding-bottom: 40px;
+  }
+  /* Reduce modal top padding on small screens */
+  .modal-scroll-outer {
+    padding: 16px 12px !important;
+    align-items: flex-start !important;
+  }
+}

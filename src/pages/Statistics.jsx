@@ -216,7 +216,7 @@ function AdminStatistics() {
       </div>
 
       {/* Charts row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginBottom: 18 }}>
+      <div className="grid-2col" style={{ gap: 18, marginBottom: 18 }}>
         {/* Monthly submissions */}
         <ChartPanel title="Monthly Submissions (Last 12 Months)">
           {loading ? (
@@ -263,7 +263,7 @@ function AdminStatistics() {
       </div>
 
       {/* Industry + College breakdown */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
+      <div className="grid-2col" style={{ gap: 18 }}>
         {/* Industry */}
         <ChartPanel title="Breakdown by Industry">
           {loading ? (
@@ -342,7 +342,7 @@ function FacultyStatistics() {
       </div>
 
       {/* Charts */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginBottom: 18 }}>
+      <div className="grid-2col" style={{ gap: 18, marginBottom: 18 }}>
         <ChartPanel title="Industry Breakdown">
           {loading ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
